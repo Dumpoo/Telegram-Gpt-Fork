@@ -2,7 +2,7 @@ from telegram.ext import ApplicationBuilder, MessageHandler, filters, CommandHan
 
 from util import load_message, send_photo, send_text, show_main_menu, load_prompt, Dialog
 from ds import DeepSeekHandler
-from settings import BOT_TOKEN
+from settings import BOT_TOKEN, logger
 
 
 dialog = Dialog()
@@ -39,14 +39,18 @@ async def gpt(update, context):
 async def gpt_dialog(update, context):
     text = update.message.text
     prompt = load_prompt("gpt")
+    logger.info(f"def gpt_dialog - prompt: {prompt}")
+    logger.info(f"def gpt_dialog - text: {text}")
     my_message = await send_text(update, context, "ChatGPT 🧠 занимается генерацией вашего профиля. " "Подождите пару секунд...")
     answer = await dsh.send_question(prompt, text)
+    logger.info(f"def gpt_dialog - answer: {answer}")
     await my_message.edit_text(answer)
 
 
 async def questions(update, context):
     dialog.mode = "questions"
     text = load_message("questions")
+    logger.info(f"def questions - {text}")
     await send_text(update, context, text)
 
 
@@ -55,20 +59,25 @@ async def questions_dialog(update, context):
     prompt = load_prompt("questions")
     my_message = await send_text(update, context, "ChatGPT 🧠 занимается генерацией вашего профиля. " "Подождите пару секунд...")
     answer = await dsh.send_question(prompt, text)
+    logger.info(f"def questions_dialog - {answer}")
     await my_message.edit_text(answer)
 
 
 async def results(update, context):
     dialog.mode = "results"
     text = load_message("results")
+    logger.info(f"def results - {text}")
     await send_text(update, context, text)
 
 
 async def results_dialog(update, context):
     text = update.message.text
     prompt = load_prompt("results")
+    logger.info(f"def results_dialog - prompt: {prompt}")
     my_message = await send_text(update, context, "ChatGPT 🧠 занимается генерацией вашего профиля. " "Подождите пару секунд...")
+    logger.info(f"def results_dialog - my_message: {my_message}")
     answer = await dsh.send_question(prompt, text)
+    logger.info(f"def results_dialog - answer: {answer}")
     await my_message.edit_text(answer)
 
 
